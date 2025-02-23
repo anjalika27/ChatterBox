@@ -54,7 +54,7 @@ export default function SearchUser({ chatRooms, setChatRooms, currentChatRoom, s
                             <input className="modal-title fs-5" type='text' id="staticBackdropLabel" style={{ backgroundColor: 'white', color: 'black', borderRadius: '6px', padding: '2px' }} onChange={(e) => setSearchQuery(e.target.value)}></input>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body p-0" style={{ fontSize: '13px' }}>
                             <ul className="list-group">
                                 {
                                     users.map((u) =>
