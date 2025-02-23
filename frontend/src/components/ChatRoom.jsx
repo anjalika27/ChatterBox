@@ -4,6 +4,7 @@ import TextInput from './TextInput.jsx'
 import Navbar from './Navbar.jsx'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
+import ChatElement from './ChatElement.jsx'
 
 export default function ChatRoom() {
     const { user } = useAuth0()
@@ -14,7 +15,6 @@ export default function ChatRoom() {
     useEffect(() => {
         //get all chatrooms of current user and pass the usestate to searchbar and add the new chat if made in the current chatroom usestate
         const getAllChatRooms = async () => {
-            console.log(user);
             const response = await axios.get('http://localhost:8080/getAllChatRooms', {
                 params: { email: user.email }
             })
@@ -27,16 +27,16 @@ export default function ChatRoom() {
 
     useEffect(() => {
         console.log(currentChatRoom, 'currentchatroom');
-
-        // const fetchAllChats = async () => {
-        //     const response = await axios.get('http://localhost:8080', {
-        //         params: { chat_id: currentChatRoom._id }
-        //     })
-        //     // fetch all messages for this chatroom in descending order
-        //     console.log(response.data, 'messages list');
-        //     setCurrentMessageList(response.data);
-        // }
-        // fetchAllChats()
+        const fetchAllChats = async () => {
+            const response = await axios.get('http://localhost:8080/getAllMessages', {
+                params: { chat_room_id: currentChatRoom._id }
+            })
+            // fetch all messages for this chatroom in descending order
+            console.log(response.data, 'messages list');
+            setCurrentMessageList(response.data);
+        }
+        if (currentChatRoom)
+            fetchAllChats()
     }, [currentChatRoom])
 
     return (
@@ -48,7 +48,9 @@ export default function ChatRoom() {
                 </div>
                 <div style={{ width: '70%', height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <div className="messageList" style={{ height: '95%' }}>
-                        all messages
+                        {currentMessageList.length > 0 &&
+                            currentMessageList.map((m) => <ChatElement message={m} />)
+                        }
                     </div>
                     <TextInput currentChatRoom={currentChatRoom} setCurrentChatRoom={setCurrentChatRoom} />
                 </div>

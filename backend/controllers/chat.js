@@ -85,8 +85,45 @@ export async function getAllChatRooms(req, res) {
     }
 }
 
+export async function getAllMessages(req, res) {
+    try {
+        const { chat_room_id } = req.query
+        if (!chat_room_id) return res.status(400).send('missing chat room id')
+
+        const allMessages = await MessageDB.aggregate([
+            {
+                $match: {
+                    chat_room_id// Match the newly created chat room
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",             // Collection to join
+                    localField: "receiver_id", // Field in 'Chat' (emails)
+                    foreignField: "email",     // Matching field in 'User'
+                    as: "receiverDetails"          // Output field
+                },
+
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "sender_id",
+                    foreignField: "email",
+                    as: "senderDetails"
+                }
+            }
+        ])
+        console.log(allMessages);
+
+        return res.status(200).send(allMessages)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send('server error', error);
+    }
+}
+
 export async function addMessage(req, res) {
-    console.log(req.body);
 
     try {
         const { sender_id, receiver_id, message, chat_room_id } = req.body;
@@ -103,5 +140,4 @@ export async function addMessage(req, res) {
         console.log(error);
         return res.status(500).send('server error', error);
     }
-    return "skrjg";
 }
