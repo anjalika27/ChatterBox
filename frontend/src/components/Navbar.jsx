@@ -20,6 +20,7 @@ export default function Navbar() {
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <img src={isAuthenticated ? user.picture : "user.png"} alt="user" style={{ height: '120px', width: '120px', marginLeft: '38%', borderRadius: '50%' }} />
                             <p><strong>Name: </strong>{isAuthenticated ? user.name : ""}</p>
                             <p><strong>Email: </strong>{isAuthenticated ? user.email : ""}</p>
                         </div>
