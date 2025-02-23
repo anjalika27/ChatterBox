@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 
-export default function SearchUser({ chatRooms, setChatRooms }) {
+export default function SearchUser({ chatRooms, setChatRooms, currentChatRoom, setCurrentChatRoom }) {
     const { user } = useAuth0()
     const [allUsers, setAllUsers] = useState([])
     const [users, setUsers] = useState([])
@@ -31,9 +31,14 @@ export default function SearchUser({ chatRooms, setChatRooms }) {
         })
         console.log(response.data, 'newchat');
 
-        if (response.data) {
+        if (chatRooms.length > 0) {
             const newChatRoomsList = chatRooms.filter((c) => c._id != response.data._id)
             setChatRooms(() => [response.data, ...newChatRoomsList])
+            setCurrentChatRoom(response.data);
+        }
+        else {
+            setChatRooms([response.data]);
+            setCurrentChatRoom(response.data)
         }
     }
 

@@ -1,4 +1,5 @@
 import ChatDB from '../models/chat.js'
+import MessageDB from '../models/message.js'
 
 export async function addChatRoom(req, res) {
     const { sender_id, receiver_id } = req.body;
@@ -6,22 +7,54 @@ export async function addChatRoom(req, res) {
     try {
         if (!sender_id || !receiver_id) return res.status(400).send('missing id of sender/receiver');
 
-        const existingChatRoom = await ChatDB.findOne({
-            participants: { $all: [sender_id, receiver_id] },
-            group_chat: false
-        })
+        let chatRoom = await ChatDB.aggregate([
+            {
+                $match: {
+                    participants: { $all: [sender_id, receiver_id] },
+                    group_chat: false
+                }
+            },
+            {
+                $lookup: {
+                    from: "users",             // The collection to join
+                    localField: "participants", // Field in 'Chat' (emails)
+                    foreignField: "email",     // Matching field in 'User'
+                    as: "userDetails"          // Output field
+                }
+            }
+        ]);
 
-        let newChatRoom = null;
-        if (!existingChatRoom) {
-            newChatRoom = await ChatDB.create({
+        if (chatRoom.length == 0) {
+            chatRoom = await ChatDB.create({
                 chat_name: null,
                 group_chat: false,
                 participants: [sender_id, receiver_id],
                 admins: [],
                 created_by: sender_id
             })
+
+            const chatWithUserDetails = await ChatDB.aggregate([
+                {
+                    $match: {
+                        _id: chatRoom._id // Match the newly created chat room
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "users",             // Collection to join
+                        localField: "participants", // Field in 'Chat' (emails)
+                        foreignField: "email",     // Matching field in 'User'
+                        as: "userDetails"          // Output field
+                    }
+                }
+            ]);
+
+            chatRoom = chatWithUserDetails;
         }
-        return res.status(201).json(newChatRoom)
+        chatRoom = chatRoom[0];
+        console.log(chatRoom, 'newchatroom added');
+
+        return res.status(201).json(chatRoom)
 
     } catch (error) {
         console.log(error);
@@ -50,4 +83,25 @@ export async function getAllChatRooms(req, res) {
         console.log(error);
         return res.status(500).send('server error', error);
     }
+}
+
+export async function addMessage(req, res) {
+    console.log(req.body);
+
+    try {
+        const { sender_id, receiver_id, message, chat_room_id } = req.body;
+        if (!sender_id || !receiver_id || !chat_room_id) return res.status(400).send('missing id of sender/receiver/chatroom');
+
+        const newMessage = await MessageDB.create({
+            sender_id, receiver_id, chat_room_id: chat_room_id, status: 'sent',
+            message
+        })
+
+        return res.status(201).send(newMessage)
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send('server error', error);
+    }
+    return "skrjg";
 }
