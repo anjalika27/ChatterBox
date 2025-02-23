@@ -1,10 +1,15 @@
 import mongoose from "mongoose";
 
 const chatSchema = new mongoose.Schema({
-    chat_name: String,
+    group_name: String,
+    group_chat: Boolean,
     participants: [
-        { type: mongoose.Schema.Types.ObjectId, ref: "users" } // References User model
-    ]
+        { type: String, ref: "users" } // References User model
+    ],
+    admins: [
+        { type: String, ref: "users" } // References User model
+    ],
+    created_by: { type: String, ref: "users" }
 }, { timestamps: true })
 
 const chatModel = mongoose.model('chats', chatSchema)

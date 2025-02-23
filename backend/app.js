@@ -5,6 +5,7 @@ import { connectDB } from "./services/db.js"
 import { configDotenv } from "dotenv"
 import authRoutes from './routes/authRoutes.js'
 import userRoutes from './routes/userRoutes.js'
+import chatRoutes from './routes/chatRoutes.js'
 import cors from 'cors'
 configDotenv()
 
@@ -31,7 +32,7 @@ io.on('connect', async (socket) => {
 
 })
 
-app.use('', [authRoutes, userRoutes])
+app.use('', [authRoutes, userRoutes, chatRoutes])
 
 const PORT = process.env.PORT || 8000;
 const DB_URL = process.env.DB_URL

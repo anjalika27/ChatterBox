@@ -28,6 +28,7 @@ export default function SearchUser() {
             sender_id: user.email,
             receiver_id: receiver_email
         })
+        console.log(response.data)
     }
 
     return (
@@ -45,9 +46,9 @@ export default function SearchUser() {
                         <div className="modal-body">
                             <ul className="list-group">
                                 {
-                                    users.map((u) => {
-                                        return <li key={u.email} className="list-group-item" onClick={() => addChat(u.email)}>{u.first_name} {u.last_name} - {u.email}</li>
-                                    })
+                                    users.map((u) =>
+                                        (<button type="button" style={{ width: '100%' }} key={u.email} className="btn" onClick={() => addChat(u.email)} data-bs-dismiss="modal" >{u.first_name} {u.last_name} - {u.email}</button>)
+                                    )
                                 }
                             </ul>
                         </div>
