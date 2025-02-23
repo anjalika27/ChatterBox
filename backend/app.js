@@ -4,10 +4,9 @@ import { Server } from "socket.io"
 import { connectDB } from "./services/db.js"
 import { configDotenv } from "dotenv"
 import authRoutes from './routes/authRoutes.js'
+import userRoutes from './routes/userRoutes.js'
 import cors from 'cors'
 configDotenv()
-
-
 
 const app = express()
 
@@ -32,7 +31,7 @@ io.on('connect', async (socket) => {
 
 })
 
-app.use('', authRoutes)
+app.use('', [authRoutes, userRoutes])
 
 const PORT = process.env.PORT || 8000;
 const DB_URL = process.env.DB_URL
