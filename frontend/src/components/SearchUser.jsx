@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 
-export default function SearchUser() {
+export default function SearchUser({ chatRooms, setChatRooms }) {
     const { user } = useAuth0()
     const [allUsers, setAllUsers] = useState([])
     const [users, setUsers] = useState([])
@@ -19,6 +19,7 @@ export default function SearchUser() {
     useEffect(() => {
         if (allUsers.length > 0) {
             const userdata = allUsers.filter((u) => u.email.includes(searchQuery))
+
             setUsers(userdata)
         }
     }, [searchQuery])
@@ -28,7 +29,12 @@ export default function SearchUser() {
             sender_id: user.email,
             receiver_id: receiver_email
         })
-        console.log(response.data)
+        console.log(response.data, 'newchat');
+
+        if (response.data) {
+            const newChatRoomsList = chatRooms.filter((c) => c._id != response.data._id)
+            setChatRooms(() => [response.data, ...newChatRoomsList])
+        }
     }
 
     return (

@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { useAuth0 } from '@auth0/auth0-react'
 import SearchUser from './SearchUser'
 
-export default function Navbar() {
+export default function Navbar({ chatRooms, setChatRooms }) {
     const { user, isAuthenticated } = useAuth0()
     return (
         <>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', padding: '4px 10px' }}>
-                <SearchUser />
-                <div>sljerb</div>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', padding: '4px 10px', borderBottom: '0.1px solid grey' }}>
+                <SearchUser chatRooms={chatRooms} setChatRooms={setChatRooms} />
+                <div style={{ fontWeight: 'bold', marginTop: '5px' }}>ChatterBox</div>
                 <button className="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{ padding: 0 }}>
                     <img src={isAuthenticated ? user.picture : "user.png"} alt="user" style={{ height: '28px', width: '28px' }} />
                 </button>

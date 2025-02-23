@@ -1,8 +1,9 @@
 import express from 'express'
-import { addChatRoom } from '../controllers/chat.js';
+import { addChatRoom, getAllChatRooms } from '../controllers/chat.js';
 
 const router = express.Router()
 
-router.post('/addChatRoom', addChatRoom);
+router.post('/addChatRoom', addChatRoom)
+    .get('/getAllChatRooms', getAllChatRooms)
 
 export default router;

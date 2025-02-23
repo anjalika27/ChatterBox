@@ -28,3 +28,26 @@ export async function addChatRoom(req, res) {
         return res.status(500).send('server error', error);
     }
 }
+
+
+export async function getAllChatRooms(req, res) {
+    const { email } = req.query;
+    try {
+        if (!email) return res.status(400).send('missing params')
+        const data = await ChatDB.aggregate([
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'participants',
+                    foreignField: 'email',
+                    as: 'userDetails'
+                }
+            }])
+
+        //not able to get name of participants
+        return res.status(200).json(data)
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send('server error', error);
+    }
+}
