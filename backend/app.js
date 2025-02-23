@@ -3,9 +3,17 @@ import http from "http"
 import { Server } from "socket.io"
 import { connectDB } from "./services/db.js"
 import { configDotenv } from "dotenv"
+import authRoutes from './routes/authRoutes.js'
+import cors from 'cors'
 configDotenv()
 
+
+
 const app = express()
+
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+app.use(express.json())
+
 const server = http.createServer(app)
 const io = new Server(server, {
     cors: {
@@ -24,13 +32,14 @@ io.on('connect', async (socket) => {
 
 })
 
+app.use('', authRoutes)
 
 const PORT = process.env.PORT || 8000;
 const DB_URL = process.env.DB_URL
 
 connectDB(DB_URL).then(() => {
     app.listen(PORT, () => {
-        console.log('server running');
+        console.log('server running on ', PORT);
     })
 }).catch((err) => {
     console.log(err, 'error connecting');
