@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function ChatUsersList({ chatRooms }) {
     const { user } = useAuth0()
-    console.log(chatRooms, 'chatuserlist');
+    // console.log(chatRooms, 'chatuserlist');
 
     return (
         <ul className="list-group" style={{ border: '0.1px solid grey' }}>

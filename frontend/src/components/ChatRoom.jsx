@@ -5,12 +5,24 @@ import Navbar from './Navbar.jsx'
 import axios from 'axios'
 import { useAuth0 } from '@auth0/auth0-react'
 import ChatElement from './ChatElement.jsx'
+import io from 'socket.io-client'
+
+
+const END_POINT = 'http://localhost:8080';
+let socket;
 
 export default function ChatRoom() {
     const { user } = useAuth0()
     const [chatRooms, setChatRooms] = useState([])
     const [currentChatRoom, setCurrentChatRoom] = useState()
     const [currentMessageList, setCurrentMessageList] = useState([])
+
+    useEffect(() => {
+        socket = io(END_POINT);
+        // socket.on("connection", () => {
+        //     console.log("Connected to server:", socket.id);
+        // });
+    }, [])
 
     useEffect(() => {
         //get all chatrooms of current user and pass the usestate to searchbar and add the new chat if made in the current chatroom usestate
@@ -26,17 +38,19 @@ export default function ChatRoom() {
     }, [])
 
     useEffect(() => {
-        console.log(currentChatRoom, 'currentchatroom');
+        // console.log(currentChatRoom, 'currentchatroom');
         const fetchAllChats = async () => {
             const response = await axios.get('http://localhost:8080/getAllMessages', {
                 params: { chat_room_id: currentChatRoom._id }
             })
             // fetch all messages for this chatroom in descending order
-            console.log(response.data, 'messages list');
+            // console.log(response.data, 'messages list');
             setCurrentMessageList(response.data);
         }
-        if (currentChatRoom)
+        if (currentChatRoom) {
+
             fetchAllChats()
+        }
     }, [currentChatRoom])
 
     return (

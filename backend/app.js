@@ -16,13 +16,14 @@ app.use(express.json())
 
 const server = http.createServer(app)
 const io = new Server(server, {
+    // pingTimeout: 120000,
     cors: {
         origin: '*',
         methods: ['GET', 'POST', 'PUT', 'DELETE']
     }
 });
 
-io.on('connect', async (socket) => {
+io.on('connection', async (socket) => {
     console.log('new user id: ', socket.id);
 
     socket.on('msge', (msge) => {
@@ -30,6 +31,9 @@ io.on('connect', async (socket) => {
 
     })
 
+    socket.on('disconnect', () => {
+        console.log('socker disconnected');
+    })
 })
 
 app.use('', [authRoutes, userRoutes, chatRoutes])
@@ -38,7 +42,7 @@ const PORT = process.env.PORT || 8000;
 const DB_URL = process.env.DB_URL
 
 connectDB(DB_URL).then(() => {
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
         console.log('server running on ', PORT);
     })
 }).catch((err) => {

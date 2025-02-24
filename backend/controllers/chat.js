@@ -52,7 +52,7 @@ export async function addChatRoom(req, res) {
             chatRoom = chatWithUserDetails;
         }
         chatRoom = chatRoom[0];
-        console.log(chatRoom, 'newchatroom added');
+        // console.log(chatRoom, 'newchatroom added');
 
         return res.status(201).json(chatRoom)
 
@@ -114,7 +114,7 @@ export async function getAllMessages(req, res) {
                 }
             }
         ])
-        console.log(allMessages);
+        // console.log(allMessages);
 
         return res.status(200).send(allMessages)
     } catch (error) {
