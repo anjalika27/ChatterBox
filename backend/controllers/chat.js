@@ -68,14 +68,25 @@ export async function getAllChatRooms(req, res) {
     try {
         if (!email) return res.status(400).send('missing params')
         const data = await ChatDB.aggregate([
+            // 🔹 Match chat rooms where user is a participant OR creator
+            {
+                $match: {
+                    $or: [
+                        { created_by: email }, // If the user created the chat room
+                        { participants: email } // If the user is a participant
+                    ]
+                }
+            },
+            // 🔹 Lookup user details for participants
             {
                 $lookup: {
-                    from: 'users',
-                    localField: 'participants',
-                    foreignField: 'email',
-                    as: 'userDetails'
+                    from: "users",
+                    localField: "participants",
+                    foreignField: "email",
+                    as: "userDetails"
                 }
-            }])
+            },
+        ]);
 
         //not able to get name of participants
         return res.status(200).json(data)

@@ -16,12 +16,21 @@ export default function ChatRoom() {
     const [chatRooms, setChatRooms] = useState([])
     const [currentChatRoom, setCurrentChatRoom] = useState()
     const [currentMessageList, setCurrentMessageList] = useState([])
+    const [socketConnected, setSocketConnected] = useState(false)
+
+    const fetchAllChats = async () => {
+        const response = await axios.get('http://localhost:8080/getAllMessages', {
+            params: { chat_room_id: currentChatRoom._id }
+        })
+        // fetch all messages for this chatroom in descending order
+        // console.log(response.data, 'messages list');
+        setCurrentMessageList(response.data);
+    }
 
     useEffect(() => {
-        socket = io(END_POINT);
-        // socket.on("connection", () => {
-        //     console.log("Connected to server:", socket.id);
-        // });
+        socket = new io('http://localhost:8080');
+        socket.emit('user-join', user);
+        socket.on('connected', () => setSocketConnected(true), console.log('user joined room'))
     }, [])
 
     useEffect(() => {
@@ -39,19 +48,21 @@ export default function ChatRoom() {
 
     useEffect(() => {
         // console.log(currentChatRoom, 'currentchatroom');
-        const fetchAllChats = async () => {
-            const response = await axios.get('http://localhost:8080/getAllMessages', {
-                params: { chat_room_id: currentChatRoom._id }
-            })
-            // fetch all messages for this chatroom in descending order
-            // console.log(response.data, 'messages list');
-            setCurrentMessageList(response.data);
-        }
-        if (currentChatRoom) {
 
+        if (currentChatRoom) {
+            // console.log(user.email)
+            socket.emit('room-join', currentChatRoom._id);
             fetchAllChats()
         }
     }, [currentChatRoom])
+
+    useEffect(() => {
+        socket.on('message-received', (msgeObj) => {
+            console.log(msgeObj, 'obj');
+
+            fetchAllChats()
+        })
+    })
 
     return (
         <>
@@ -61,12 +72,12 @@ export default function ChatRoom() {
                     <ChatUsersList chatRooms={chatRooms} />
                 </div>
                 <div style={{ width: '70%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <div className="messageList" style={{ height: '95%' }}>
+                    <div className="messageList" key={user.id} style={{ height: '95%', overflowY: 'scroll', scrollbarWidth: 'thin' }}>
                         {currentMessageList.length > 0 &&
-                            currentMessageList.map((m) => <ChatElement message={m} />)
+                            currentMessageList.map((m) => <ChatElement key={m.id} message={m} />)
                         }
                     </div>
-                    <TextInput currentChatRoom={currentChatRoom} setCurrentChatRoom={setCurrentChatRoom} />
+                    <TextInput socket={socket} currentChatRoom={currentChatRoom} setCurrentChatRoom={setCurrentChatRoom} fetchAllChats={fetchAllChats} />
                 </div>
             </div>
         </>

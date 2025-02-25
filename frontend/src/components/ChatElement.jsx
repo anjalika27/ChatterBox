@@ -3,11 +3,11 @@ import React from 'react'
 import { MessageBox } from 'react-chat-elements'
 
 
-function ChatElement({ message }) {
+function ChatElement({ message, key }) {
     const { user } = useAuth0()
 
     return (
-        <div style={{
+        <div key={key} style={{
             display: 'flex',
             justifyContent: message.sender_id !== user.email ? 'start' : 'end'
         }}>

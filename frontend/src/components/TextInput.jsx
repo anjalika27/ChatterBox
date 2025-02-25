@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import axios from "axios"
 import { useAuth0 } from '@auth0/auth0-react'
 
-export default function TextInput({ currentChatRoom, setCurrentChatRoom }) {
-    const [chatInput, setChatInput] = useState()
+export default function TextInput({ fetchAllChats, socket, currentChatRoom, setCurrentChatRoom }) {
+    const [chatInput, setChatInput] = useState("")
     const { user } = useAuth0()
 
     const addMessage = async () => {
-
+        setChatInput("")
         const recipients = currentChatRoom.userDetails.reduce((acc, u) => {
             if (u.email !== user.email) acc.push(u.email)
             return acc;
@@ -19,7 +19,16 @@ export default function TextInput({ currentChatRoom, setCurrentChatRoom }) {
             message: chatInput,
             chat_room_id: currentChatRoom._id
         })
-        console.log(response.data, 'new msge added');
+
+        socket.emit('new-message', {
+            sender_id: user.email,
+            receiver_id: recipients,
+            message: chatInput,
+            chat_room_id: currentChatRoom._id
+        })
+
+        fetchAllChats()
+
 
     }
 
