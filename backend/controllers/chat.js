@@ -2,7 +2,12 @@ import ChatDB from '../models/chat.js'
 import MessageDB from '../models/message.js'
 
 export async function addChatRoom(req, res) {
-    const { sender_id, receiver_id } = req.body;
+    const { sender_id, receiver_id, group_chat, group_name } = req.body;
+    console.log(receiver_id, 'reciver');
+
+    console.log(group_name);
+
+
 
     try {
         if (!sender_id || !receiver_id) return res.status(400).send('missing id of sender/receiver');
@@ -10,8 +15,8 @@ export async function addChatRoom(req, res) {
         let chatRoom = await ChatDB.aggregate([
             {
                 $match: {
-                    participants: { $all: [sender_id, receiver_id] },
-                    group_chat: false
+                    participants: { $all: [sender_id, ...receiver_id] },
+                    group_chat: group_chat
                 }
             },
             {
@@ -26,10 +31,10 @@ export async function addChatRoom(req, res) {
 
         if (chatRoom.length == 0) {
             chatRoom = await ChatDB.create({
-                chat_name: null,
-                group_chat: false,
-                participants: [sender_id, receiver_id],
-                admins: [],
+                group_name: group_name,
+                group_chat: group_chat,
+                participants: [sender_id, ...receiver_id],
+                admins: [sender_id],
                 created_by: sender_id
             })
 

@@ -69,7 +69,7 @@ export default function ChatRoom() {
             <Navbar chatRooms={chatRooms} setChatRooms={setChatRooms} currentChatRoom={currentChatRoom} setCurrentChatRoom={setCurrentChatRoom} />
             <div className='container' style={{ display: 'flex', padding: 0, height: '93.5%' }}>
                 <div style={{ width: '30%', height: '100%', borderRight: '0.1px solid grey' }}>
-                    <ChatUsersList chatRooms={chatRooms} />
+                    <ChatUsersList chatRooms={chatRooms} setCurrentChatRoom={setCurrentChatRoom} currentChatRoom={currentChatRoom} />
                 </div>
                 <div style={{ width: '70%', height: '100%', display: 'flex', flexDirection: 'column' }}>
                     <div className="messageList" key={user.id} style={{ height: '95%', overflowY: 'scroll', scrollbarWidth: 'thin' }}>

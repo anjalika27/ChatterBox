@@ -13,8 +13,11 @@ function ChatElement({ message, key }) {
         }}>
             <div className="card" style={{ width: '50%', backgroundColor: 'whitesmoke', right: 0 }}>
                 <div className="card-body" style={{ padding: '3px' }}>
-                    <p style={{ fontWeight: '600', fontSize: '13px', margin: 0 }}>
-                        {message.senderDetails[0].first_name + ' ' + message.senderDetails[0].last_name}</p>
+                    <div style={{ display: 'flex', justifyContent: 'start', gap: '4px' }}>
+                        <img src={'user.png'} alt="" height={'16px'} width={'16px'} style={{ marginTop: '1.5px' }} />
+                        <p style={{ fontWeight: '600', fontSize: '13px', margin: 0 }}>
+                            {message.senderDetails[0].first_name + ' ' + message.senderDetails[0].last_name}</p>
+                    </div>
                     {message.message}
                 </div>
             </div>
