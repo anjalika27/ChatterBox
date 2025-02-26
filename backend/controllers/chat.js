@@ -3,11 +3,6 @@ import MessageDB from '../models/message.js'
 
 export async function addChatRoom(req, res) {
     const { sender_id, receiver_id, group_chat, group_name } = req.body;
-    console.log(receiver_id, 'reciver');
-
-    console.log(group_name);
-
-
 
     try {
         if (!sender_id || !receiver_id) return res.status(400).send('missing id of sender/receiver');
@@ -155,5 +150,31 @@ export async function addMessage(req, res) {
     } catch (error) {
         console.log(error);
         return res.status(500).send('server error', error);
+    }
+}
+
+
+export async function updateGroup(req, res) {
+    const { users } = req.body;
+    const { chat_room_id } = req.params;
+
+    if (!chat_room_id)
+        return res.status(400).send('missing id of sender/receiver/chatroom');
+
+    try {
+        const updatedChat = await ChatDB.findByIdAndUpdate(
+            chat_room_id,
+            { $set: { participants: users } }, // Update participants field with new users
+            { new: true } // Return the updated document
+        );
+
+        if (!updatedChat) {
+            return res.status(404).send("Chat room not found.");
+        }
+
+        return res.status(200).json(updatedChat);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Server error" });
     }
 }

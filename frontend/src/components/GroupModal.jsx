@@ -4,8 +4,6 @@ import { Modal, Button } from "react-bootstrap";
 
 
 export default function GroupModal({ addChat, groupChatModal, setGroupChatModal, users, onClose }) {
-    const { user } = useAuth0()
-    const [search, setSearch] = useState("");
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [groupChatName, setGroupChatName] = useState('')
 
@@ -16,6 +14,7 @@ export default function GroupModal({ addChat, groupChatModal, setGroupChatModal,
                 : [...prev, option]
         );
     };
+
 
     return (
         <>
@@ -71,11 +70,7 @@ export default function GroupModal({ addChat, groupChatModal, setGroupChatModal,
                         <button className='btn btn-primary' onClick={() => { addChat(selectedUsers, groupChatName, true), setGroupChatModal(false) }}>Add</button>
                     </Modal.Footer>
                 </Modal>
-
-
-
             }
-
         </>
     )
 }

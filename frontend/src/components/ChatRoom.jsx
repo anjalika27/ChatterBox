@@ -59,8 +59,8 @@ export default function ChatRoom() {
     useEffect(() => {
         socket.on('message-received', (msgeObj) => {
             console.log(msgeObj, 'obj');
-
-            fetchAllChats()
+            if (currentChatRoom)
+                fetchAllChats()
         })
     })
 
