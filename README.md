@@ -23,10 +23,13 @@
   - PORT and DB_URL
 
   #### Some Screenshots:
+
   ![search user](screenshots/1.png)
+  
   <p align="center">
     <img src="screenshots/2.png" width="45%" />
     <img src="screenshots/3.png" width="45%" />
   </p>
+
   ![Make group chat](screenshots/4.png)
   ![profile](screenshots/5.png)
