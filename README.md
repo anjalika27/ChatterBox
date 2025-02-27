@@ -11,13 +11,9 @@
   ### Run Locally
   `git clone https://github.com/anjalika27/ChatterBox.git`
   `cd ChatterBox`
-  #### for Frontend
-  `cd frontend ` <br/>
-  `npm install`
-
-  #### for Backend
-  `cd backend` <br/>
-  `npm install`
+  #### Individually run the follwing commands for frontend and backend folder
+  `npm install` <br />
+  `npm run dev`
 
   #### Add .env file
   - PORT and DB_URL
@@ -33,4 +29,7 @@
 
   <img src="screenshots/4.png" width="50%" />
   <img src="screenshots/5.png" width="50%" />
+
+  #### Made By:
+  [Anjalika](https://github.com/anjalika27)
 
