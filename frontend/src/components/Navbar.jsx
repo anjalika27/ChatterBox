@@ -54,7 +54,7 @@ export default function Navbar({ chatRooms, setChatRooms, currentChatRoom, setCu
                 <div style={{ fontWeight: 'bold', marginTop: '5px' }}>ChatterBox</div>
 
                 <div style={{ display: 'flex', gap: '7px' }}>
-                    <strong onClick={() => setGroupChatModal(true)} style={{ margin: 0, display: 'flex', alignItems: 'center' }}>{currentChatRoom?.group_name ? currentChatRoom.group_name : ""}</strong>
+                    <strong onClick={() => setGroupChatModal(true)} style={{ margin: 0, display: 'flex', alignItems: 'center', border: '1px solid grey', padding: "2px 5px", borderRadius: '8px' }}>{currentChatRoom?.group_name ? currentChatRoom.group_name : ""}</strong>
                     <img src="notification-icon.png" alt="" height={'16px'} width={'16px'} style={{ marginTop: '7px' }} />
                     <button className="btn btn-outline-info" onClick={() => setProfile(true)} style={{ padding: 0 }}>
                         <img src={isAuthenticated ? user.picture : "user.png"} alt="user" style={{ height: '28px', width: '28px' }} />

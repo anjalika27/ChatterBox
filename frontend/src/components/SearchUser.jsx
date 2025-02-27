@@ -55,7 +55,7 @@ export default function SearchUser({ chatRooms, setChatRooms, currentChatRoom, s
                 <button className="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" style={{ padding: 0, margin: 0 }}>
                     <img src={'searchIcon.png'} alt="search" style={{ height: '16px', width: '16px' }} />
                 </button>
-                <div style={{ marginTop: '5px', borderRadius: '8px', backgroundColor: '#adb5bd', padding: '2px 10px 0px 10px', fontSize: '13px' }} onClick={() => setGroupChatModal(true)}>
+                <div style={{ marginTop: '5px', borderRadius: '8px', backgroundColor: 'rgb(203 222 240)', padding: '2px 10px 0px 10px', fontSize: '13px' }} onClick={() => setGroupChatModal(true)}>
                     + New Group
                 </div>
             </div>
